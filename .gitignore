@@ -7,3 +7,5 @@ node_modules/
 # IDE
 .vscode/
 .idea/
+littlex-venv/
+Agentic-AI/
