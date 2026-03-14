@@ -4,6 +4,9 @@
 # Dependencies
 node_modules/
 
+# Next.js
+.next/
+
 # IDE
 .vscode/
 .idea/
