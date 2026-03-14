@@ -107,3 +107,14 @@ npm run dev
 ```
 
 Open the URL shown (e.g. `http://localhost:3000`). Use the app with the backend running in the other terminal.
+
+### If the frontend (`littleX_FE`) is missing
+
+If `littleX_FE` is empty or only has a `.next` folder, restore it from the upstream repo:
+
+```bash
+git clone --depth 1 https://github.com/Jaseci-Labs/littleX.git /tmp/littleX-upstream
+rsync -a --exclude='.next' --exclude='node_modules' /tmp/littleX-upstream/littleX_FE/ littleX/littleX_FE/
+```
+
+Then run `npm i` and `npm run dev` from `littleX_FE` as in step 5.
