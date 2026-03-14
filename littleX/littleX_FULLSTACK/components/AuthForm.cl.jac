@@ -1,4 +1,4 @@
-"""Authentication form component for Little X."""
+"""Authentication form component for Voipy."""
 
 def:pub AuthForm(props: Any) -> Any {
     isSignup = props.isSignup;
@@ -13,12 +13,12 @@ def:pub AuthForm(props: Any) -> Any {
 
     return <div className="lx-auth-root">
         <div className="lx-auth-left">
-            <img src="/static/assets/littlex-logo.png" className="lx-auth-logo-big" alt="little-x" />
+            <img src="/static/assets/voipy-logo.png" className="lx-auth-logo-big" alt="voipy" />
         </div>
         <div className="lx-auth-right">
             <div className="lx-auth-box">
-                <img src="/static/assets/littlex-logo.png" className="lx-auth-mobile-logo" alt="little-x" />
-                <div className="lx-auth-heading">LITTLE-X</div>
+                <img src="/static/assets/voipy-logo.png" className="lx-auth-mobile-logo" alt="voipy" />
+                <div className="lx-auth-heading">VOIPY</div>
                 <div className="lx-auth-sub">
                     {"Create your account and join the conversation" if isSignup else "Sign in to your account"}
                 </div>
@@ -51,7 +51,7 @@ def:pub AuthForm(props: Any) -> Any {
                     </button>
                 </form>
                 <div className="lx-auth-toggle">
-                    {("Already have an account? " if isSignup else "New to Little-X? ")}
+                    {("Already have an account? " if isSignup else "New to Voipy? ")}
                     <span className="lx-auth-toggle-link" onClick={onToggleMode}>
                         {"Log In" if isSignup else "Sign Up"}
                     </span>

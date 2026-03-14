@@ -1,4 +1,4 @@
-"""Little X - Frontend declarations."""
+"""Voipy - Frontend declarations."""
 
 import from "@jac/runtime" { jacSignup, jacLogin, jacLogout, jacIsLoggedIn }
 sv import from .server { setup_profile, get_profile, get_all_profiles, follow_user, unfollow_user, create_tweet, delete_tweet, like_tweet, add_comment, load_feed, get_trending, create_channel, join_channel, leave_channel, get_channels, get_channel_detail, create_channel_tweet }
@@ -102,8 +102,8 @@ def:pub app() -> Any {
     return <div className="lx-root">
         <aside className="lx-sidebar-left">
             <div className="lx-brand">
-                <img src="/static/assets/littlex-logo.png" className="lx-brand-logo" alt="little-x" />
-                <span className="lx-brand-name">LITTLE-X</span>
+                <img src="/static/assets/voipy-logo.png" className="lx-brand-logo" alt="voipy" />
+                <span className="lx-brand-name">VOIPY</span>
             </div>
 
             <nav className="lx-nav">
@@ -542,7 +542,7 @@ def:pub app() -> Any {
                     </span>
                     <input
                         className="lx-search-input"
-                        placeholder="Search Little-X"
+                        placeholder="Search Voipy"
                         value={searchQuery}
                         onChange={lambda e: Any -> None { searchQuery = e.target.value; }}
                         onKeyDown={lambda e: Any -> None { if e.key == "Enter" { handleSearch(e.target.value); } }}

@@ -1,4 +1,4 @@
-"""Little X - Entry point combining backend and frontend."""
+"""Voipy - Entry point combining backend and frontend."""
 
 
 import from server {

@@ -1,4 +1,4 @@
-"""Little X - Frontend function implementations."""
+"""Voipy - Frontend function implementations."""
 
 impl app.loadData -> None {
     result = root spawn setup_profile(username=localStorage.getItem("lx_username") or "");

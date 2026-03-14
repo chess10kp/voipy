@@ -1,11 +1,11 @@
-# little-x
+# voipy
 
 A Jac client-side application with React support.
 
 ## Project Structure
 
 ```
-little-x/
+voipy/
 ├── jac.toml              # Project configuration
 ├── main.jac              # Main application entry
 ├── components/           # Reusable components

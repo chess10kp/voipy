@@ -1,4 +1,4 @@
-"""Tweet card component for Little X."""
+"""Tweet card component for Voipy."""
 
 import from "lucide-react" { Heart, MessageCircle, Trash2, Repeat2 }
 

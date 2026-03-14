@@ -1,4 +1,4 @@
-"""Little X - Social graph backend with TF-IDF feed ranking."""
+"""Voipy - Social graph backend with TF-IDF feed ranking."""
 
 import datetime;
 import from sklearn.feature_extraction.text { TfidfVectorizer }
