@@ -43,6 +43,15 @@ def:pub app() -> Any {
     async def handleSignup() -> None;
     def handleLogout() -> None;
     async def handleSendMessage() -> None;
+    
+    async def openBrowserSession() -> None;
+    async def browserNavigate() -> None;
+    async def browserClick() -> None;
+    async def browserType() -> None;
+    async def browserScreenshot() -> None;
+    async def browserExtractText() -> None;
+    async def browserClose() -> None;
+    async def logBrowserAction(action: str, details: str) -> None;
 
     if checkingAuth {
         return <div className="lx-loading">Loading...</div>;
