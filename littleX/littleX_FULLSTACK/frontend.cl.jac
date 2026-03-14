@@ -73,7 +73,7 @@ def:pub app() -> Any {
 
     profileUsername = myProfile.username if myProfile else "";
     displayUsername = profileUsername.split("@")[0] if profileUsername.includes("@") else profileUsername;
-    
+
     return <div className="lx-root">
         <aside className="lx-sidebar-left lx-sidebar-minimal">
             <div className="lx-brand">
@@ -93,7 +93,7 @@ def:pub app() -> Any {
                 <span>Log out</span>
             </button>
         </aside>
-        
+
         <main className="lx-main lx-main-chat">
             <div className="lx-chat">
                 <div className="lx-chat-header">
@@ -138,14 +138,14 @@ def:pub app() -> Any {
                     </button>
                 </div>
             </div>
-            
+
             {(
                 <div className="lx-browser-panel">
                     <div className="lx-browser-header">
                         <span className="lx-browser-title">Browser Automation</span>
                         <button className="lx-browser-close" onClick={lambda -> None { showBrowserPanel = false; }}>✕</button>
                     </div>
-                    
+
                     <div className="lx-browser-controls">
                         <div className="lx-browser-section">
                             <h4>Session Control</h4>
@@ -166,18 +166,18 @@ def:pub app() -> Any {
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div className="lx-browser-section">
                             <h4>Navigation</h4>
                             <div className="lx-browser-input-group">
-                                <input 
+                                <input
                                     className="lx-browser-input"
                                     type="text"
                                     placeholder="Enter URL (e.g., https://example.com)"
                                     value={browserUrl}
                                     onChange={lambda e: Any -> None { browserUrl = e.target.value; }}
                                 />
-                                <button 
+                                <button
                                     className="lx-browser-btn"
                                     disabled={browserLoading or not browserUrl.trim()}
                                     onClick={lambda -> None { browserNavigate(); }}
@@ -186,18 +186,18 @@ def:pub app() -> Any {
                                 </button>
                             </div>
                         </div>
-                        
+
                         <div className="lx-browser-section">
                             <h4>Interaction</h4>
                             <div className="lx-browser-input-group">
-                                <input 
+                                <input
                                     className="lx-browser-input"
                                     type="text"
                                     placeholder="CSS Selector (e.g., button.submit, #id, .class)"
                                     value={browserSelector}
                                     onChange={lambda e: Any -> None { browserSelector = e.target.value; }}
                                 />
-                                <button 
+                                <button
                                     className="lx-browser-btn"
                                     disabled={browserLoading or not browserSelector.trim()}
                                     onClick={lambda -> None { browserClick(); }}
@@ -206,14 +206,14 @@ def:pub app() -> Any {
                                 </button>
                             </div>
                             <div className="lx-browser-input-group">
-                                <input 
+                                <input
                                     className="lx-browser-input"
                                     type="text"
                                     placeholder="Text to type"
                                     value={browserText}
                                     onChange={lambda e: Any -> None { browserText = e.target.value; }}
                                 />
-                                <button 
+                                <button
                                     className="lx-browser-btn"
                                     disabled={browserLoading or not browserSelector.trim() or not browserText.trim()}
                                     onClick={lambda -> None { browserType(); }}
@@ -221,14 +221,14 @@ def:pub app() -> Any {
                                     Type
                                 </button>
                             </div>
-                            <button 
+                            <button
                                 className="lx-browser-btn lx-browser-btn-full"
                                 disabled={browserLoading}
                                 onClick={lambda -> None { browserExtractText(); }}
                             >
                                 Extract Page Text
                             </button>
-                            <button 
+                            <button
                                 className="lx-browser-btn lx-browser-btn-primary lx-browser-btn-full"
                                 disabled={browserLoading}
                                 onClick={lambda -> None { browserScreenshot(); }}
@@ -236,7 +236,7 @@ def:pub app() -> Any {
                                 📸 Take Screenshot
                             </button>
                         </div>
-                        
+
                         {(
                             <div className="lx-browser-section">
                                 <h4>Current View</h4>
@@ -244,7 +244,7 @@ def:pub app() -> Any {
                                     <div className="lx-browser-screenshot">
                                         <img src={browserScreenshotUrl} alt="Browser view" />
                                     </div>
-                                ) if browserScreenshot else (
+                                ) if browserScreenshotUrl else (
                                     <div className="lx-browser-placeholder">
                                         <span className="lx-browser-placeholder-icon">🌐</span>
                                         <span>No browser session active</span>
@@ -253,7 +253,7 @@ def:pub app() -> Any {
                                 )}
                             </div>
                         )}
-                        
+
                         {(
                             <div className="lx-browser-section">
                                 <h4>Action Log</h4>
@@ -268,10 +268,10 @@ def:pub app() -> Any {
                                     ]}
                                 </div>
                             </div>
-                        ) if browserActionLog.length > 0}
+                        ) if browserActionLog.length > 0 else None}
                     </div>
                 </div>
-            ) if showBrowserPanel}
+            ) if showBrowserPanel else None}
         </main>
     </div>;
 }

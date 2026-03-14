@@ -19,6 +19,8 @@ import from server {
         get_channels,
         get_channel_detail,
         create_channel_tweet,
+        chat_message,
+        get_chat_messages,
         browser_interaction_log
     }
 

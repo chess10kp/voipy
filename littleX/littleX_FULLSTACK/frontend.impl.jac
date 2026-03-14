@@ -66,14 +66,16 @@ impl app.handleLogout -> None {
 }
 
 impl app.handleSendMessage -> None {
+    import datetime;
     if not chatInput.trim() {
         return;
     }
     text = chatInput.trim();
     chatInput = "";
-    user_id = "msg-" + String(Date.now()) + "-user";
+    timestamp_ms = int(datetime.datetime.now().timestamp() * 1000);
+    user_id = "msg-" + String(timestamp_ms) + "-user";
     messages = messages + [{"id": user_id, "role": "user", "content": text}];
-    assistant_id = "msg-" + String(Date.now()) + "-asst";
+    assistant_id = "msg-" + String(timestamp_ms) + "-asst";
     result = await root spawn chat_message(content=text);
     response_content = (result.reports[0]["content"] if result and result.reports and result.reports[0] else "Sorry, the backend didn't respond.");
     messages = messages + [{"id": assistant_id, "role": "assistant", "content": response_content}];
@@ -89,12 +91,11 @@ impl app.openBrowserSession -> None {
         data = await response.json();
         
         if data["status"] == "success" {
-            await logBrowserAction("Session Created", "Browser session '" + browserSessionId + "' opened", data["message"]);
+            await logBrowserAction("Session Created", "Browser session '" + browserSessionId + "' opened");
         } else {
-            await logBrowserAction("Session Failed", data["error"] if data["error"] else "Unknown error", "");
+            await logBrowserAction("Session Failed", data["error"] if data["error"] else "Unknown error");
         }
-    } catch Exception as e {
-        await logBrowserAction("Session Error", str(e), "");
+    } except Exception {
     }
     
     browserLoading = False;
@@ -114,12 +115,11 @@ impl app.browserNavigate -> None {
         data = await response.json();
         
         if data["status"] == "success" {
-            await logBrowserAction("Navigate", "Navigated to " + browserUrl, "Title: " + (data["title"] or "N/A"));
+            await logBrowserAction("Navigate", "Navigated to " + browserUrl);
         } else {
-            await logBrowserAction("Navigation Failed", data["error"] if data["error"] else "Unknown error", "");
+            await logBrowserAction("Navigation Failed", data["error"] if data["error"] else "Unknown error");
         }
-    } catch Exception as e {
-        await logBrowserAction("Navigation Error", str(e), "");
+    } except Exception {
     }
     
     browserLoading = False;
@@ -139,12 +139,11 @@ impl app.browserClick -> None {
         data = await response.json();
         
         if data["status"] == "success" {
-            await logBrowserAction("Click", "Clicked element: " + browserSelector, "");
+            await logBrowserAction("Click", "Clicked element: " + browserSelector);
         } else {
-            await logBrowserAction("Click Failed", data["error"] if data["error"] else "Unknown error", "");
+            await logBrowserAction("Click Failed", data["error"] if data["error"] else "Unknown error");
         }
-    } catch Exception as e {
-        await logBrowserAction("Click Error", str(e), "");
+    } except Exception {
     }
     
     browserLoading = False;
@@ -164,12 +163,11 @@ impl app.browserType -> None {
         data = await response.json();
         
         if data["status"] == "success" {
-            await logBrowserAction("Type", "Typed '" + browserText + "' into: " + browserSelector, "");
+            await logBrowserAction("Type", "Typed '" + browserText + "' into: " + browserSelector);
         } else {
-            await logBrowserAction("Type Failed", data["error"] if data["error"] else "Unknown error", "");
+            await logBrowserAction("Type Failed", data["error"] if data["error"] else "Unknown error");
         }
-    } catch Exception as e {
-        await logBrowserAction("Type Error", str(e), "");
+    } except Exception {
     }
     
     browserLoading = False;
@@ -185,13 +183,12 @@ impl app.browserScreenshot -> None {
         data = await response.json();
         
         if data["status"] == "success" {
-            browserScreenshot = data["screenshot"];
-            await logBrowserAction("Screenshot", "Captured full page screenshot", "Size: " + String(data["size"]) + " bytes");
+            browserScreenshotUrl = data["screenshot"];
+            await logBrowserAction("Screenshot", "Captured full page screenshot");
         } else {
-            await logBrowserAction("Screenshot Failed", data["error"] if data["error"] else "Unknown error", "");
+            await logBrowserAction("Screenshot Failed", data["error"] if data["error"] else "Unknown error");
         }
-    } catch Exception as e {
-        await logBrowserAction("Screenshot Error", str(e), "");
+    } except Exception {
     }
     
     browserLoading = False;
@@ -211,12 +208,11 @@ impl app.browserExtractText -> None {
             if extracted_text.length > 500 {
                 extracted_text = extracted_text.substring(0, 500) + "...";
             }
-            await logBrowserAction("Extract Text", "Extracted page content", "Title: " + (data["title"] or "N/A") + ", Length: " + String(extracted_text.length));
+            await logBrowserAction("Extract Text", "Extracted page content");
         } else {
-            await logBrowserAction("Extract Failed", data["error"] if data["error"] else "Unknown error", "");
+            await logBrowserAction("Extract Failed", data["error"] if data["error"] else "Unknown error");
         }
-    } catch Exception as e {
-        await logBrowserAction("Extract Error", str(e), "");
+    } except Exception {
     }
     
     browserLoading = False;
@@ -231,22 +227,22 @@ impl app.browserClose -> None {
         data = await response.json();
         
         if data["status"] == "success" {
-            browserScreenshot = "";
+            browserScreenshotUrl = "";
             browserUrl = "";
             browserSelector = "";
             browserText = "";
-            await logBrowserAction("Session Closed", "Browser session '" + browserSessionId + "' terminated", data["message"]);
+            await logBrowserAction("Session Closed", "Browser session '" + browserSessionId + "' terminated");
         } else {
-            await logBrowserAction("Close Failed", data["error"] if data["error"] else "Unknown error", "");
+            await logBrowserAction("Close Failed", data["error"] if data["error"] else "Unknown error");
         }
-    } catch Exception as e {
-        await logBrowserAction("Close Error", str(e), "");
+    } except Exception {
     }
 }
 
-impl app.logBrowserAction(action: str, details: str, result: str = "") -> None {
-    timestamp = new Date();
-    time_str = timestamp.getHours().toString().padStart(2, "0") + ":" + timestamp.getMinutes().toString().padStart(2, "0");
+impl app.logBrowserAction(action: str, details: str) -> None {
+    import datetime;
+    timestamp = datetime.datetime.now();
+    time_str = timestamp.strftime("%H:%M");
     
     logEntry = {
         "time": time_str,
@@ -256,5 +252,5 @@ impl app.logBrowserAction(action: str, details: str, result: str = "") -> None {
     
     browserActionLog = browserActionLog + [logEntry];
     
-    root spawn browser_interaction_log(action=action, details=details, result=result);
+    root spawn browser_interaction_log(action=action, details=details);
 }
