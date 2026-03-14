@@ -31,3 +31,7 @@ logs/
 mcp_port.conf
 screenshot*.png
 
+# Lambda build artifacts
+.lambda_build/
+lambda_package.zip
+

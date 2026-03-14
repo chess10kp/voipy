@@ -7,12 +7,10 @@ set -e # Exit on error
 # Configuration
 JAC_PORT=${JAC_PORT:-8080}
 MCP_PORT=${MCP_PORT:-8001}
-WEBHOOK_PORT=${WEBHOOK_PORT:-5000}
 PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOG_DIR="$PROJECT_DIR/logs"
 JAC_PID_FILE="$LOG_DIR/jac_server.pid"
 MCP_PID_FILE="$LOG_DIR/mcp_server.pid"
-WEBHOOK_PID_FILE="$LOG_DIR/webhook_server.pid"
 
 # Create logs directory
 mkdir -p "$LOG_DIR"
@@ -23,7 +21,6 @@ echo "========================================"
 echo ""
 echo "Jac Server Port: $JAC_PORT"
 echo "MCP Server Port: $MCP_PORT"
-echo "Webhook Port:    $WEBHOOK_PORT"
 echo "Project Directory: $PROJECT_DIR"
 echo ""
 
@@ -33,16 +30,6 @@ cleanup() {
 	echo "========================================"
 	echo "Shutting down..."
 	echo "========================================"
-
-	# Kill Webhook server if running
-	if [ -f "$WEBHOOK_PID_FILE" ]; then
-		WEBHOOK_PID=$(cat "$WEBHOOK_PID_FILE")
-		if kill -0 "$WEBHOOK_PID" 2>/dev/null; then
-			echo "Stopping Webhook server (PID: $WEBHOOK_PID)..."
-			kill "$WEBHOOK_PID"
-			rm "$WEBHOOK_PID_FILE"
-		fi
-	fi
 
 	# Kill MCP server if running
 	if [ -f "$MCP_PID_FILE" ]; then
@@ -81,12 +68,6 @@ fi
 if [ -f "$MCP_PID_FILE" ] && kill -0 $(cat "$MCP_PID_FILE") 2>/dev/null; then
 	echo "MCP server is already running (PID: $(cat $MCP_PID_FILE))"
 	echo "Stop it first with: kill $(cat $MCP_PID_FILE)"
-	exit 1
-fi
-
-if [ -f "$WEBHOOK_PID_FILE" ] && kill -0 $(cat "$WEBHOOK_PID_FILE") 2>/dev/null; then
-	echo "Webhook server is already running (PID: $(cat $WEBHOOK_PID_FILE))"
-	echo "Stop it first with: kill $(cat $WEBHOOK_PID_FILE)"
 	exit 1
 fi
 
@@ -133,16 +114,6 @@ echo $MCP_PID >"$MCP_PID_FILE"
 echo "MCP wrapper server started (PID: $MCP_PID) on port $MCP_PORT"
 echo "Log: $LOG_DIR/mcp_server.log"
 
-# Start Twilio Webhook Server
-echo ""
-echo "[3/3] Starting Twilio webhook server..."
-export WEBHOOK_PORT=$WEBHOOK_PORT
-python3 twilio_webhook.py >"$LOG_DIR/webhook_server.log" 2>&1 &
-WEBHOOK_PID=$!
-echo $WEBHOOK_PID >"$WEBHOOK_PID_FILE"
-echo "Webhook server started (PID: $WEBHOOK_PID) on port $WEBHOOK_PORT"
-echo "Log: $LOG_DIR/webhook_server.log"
-
 # Final status
 echo ""
 echo "========================================"
@@ -151,17 +122,14 @@ echo "========================================"
 echo ""
 echo "Voipy Web App:        http://localhost:$JAC_PORT"
 echo "MCP Server:            http://localhost:$MCP_PORT"
-echo "Twilio Webhook:        http://localhost:$WEBHOOK_PORT"
 echo ""
 echo "Server PIDs:"
-echo "  Jac:     $JAC_PID"
-echo "  MCP:     $MCP_PID"
-echo "  Webhook: $WEBHOOK_PID"
+echo "  Jac:  $JAC_PID"
+echo "  MCP:  $MCP_PID"
 echo ""
 echo "View logs:"
-echo "  Jac:     tail -f $LOG_DIR/jac_server.log"
-echo "  MCP:     tail -f $LOG_DIR/mcp_server.log"
-echo "  Webhook: tail -f $LOG_DIR/webhook_server.log"
+echo "  Jac:  tail -f $LOG_DIR/jac_server.log"
+echo "  MCP:  tail -f $LOG_DIR/mcp_server.log"
 echo ""
 echo "Press Ctrl+C to stop all servers"
 echo ""

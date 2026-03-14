@@ -21,7 +21,6 @@ mcp = ">=1.0.0"
 httpx = ">=0.25.0"
 playwright = ">=1.40.0"
 twilio = ">=9.0.0"
-flask = ">=3.0.0"
 
 [dependencies.npm]
 jac-client-node = "1.0.7"
