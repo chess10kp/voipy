@@ -43,10 +43,18 @@ node Channel {
     has created_at: str = "";
 }
 
+node ChatMessage {
+    has content: str = "";
+    has role: str = "user";
+    has author_username: str = "";
+    has created_at: str = "";
+}
+
 edge Follow {}
 edge Post {}
 edge Member {}
 edge ChannelPost {}
+edge Chat {}
 
 walker setup_profile {
     has username: str = "";
@@ -68,6 +76,57 @@ walker setup_profile {
             }
             report {"id": jid(profile), "username": profile.username, "bio": profile.bio, "created_at": profile.created_at};
         }
+    }
+}
+
+walker chat_message {
+    has content: str = "";
+
+    can run with Root entry {
+        content = self.content.strip() if self.content else "";
+        if not content {
+            report {"content": "Send a non-empty message."};
+            disengage;
+        }
+        profiles = [-->(?:Profile)];
+        if not profiles {
+            report {"content": "Please log in to send messages."};
+            disengage;
+        }
+        profile = profiles[0];
+        user_msg = profile +>:Chat():+> ChatMessage(
+            content=content,
+            role="user",
+            author_username=profile.username,
+            created_at=_now()
+        );
+        grant(user_msg[0], level=ConnectPerm);
+        reply = "Voipy received: \"" + content + "\". Backend is connected. (Replace this with your own chat or AI logic in the chat_message walker.)";
+        asst_msg = profile +>:Chat():+> ChatMessage(
+            content=reply,
+            role="assistant",
+            author_username="",
+            created_at=_now()
+        );
+        grant(asst_msg[0], level=ConnectPerm);
+        report {"content": reply};
+    }
+}
+
+walker get_chat_messages {
+    can run with Root entry {
+        profiles = [-->(?:Profile)];
+        if not profiles {
+            report [];
+            disengage;
+        }
+        profile = profiles[0];
+        messages = [
+            {"id": jid(m), "content": m.content, "role": m.role, "author_username": m.author_username, "created_at": m.created_at}
+            for m in [profile-->(?:ChatMessage)]
+        ];
+        messages.sort(key=lambda m: m["created_at"]);
+        report messages;
     }
 }
 
