@@ -29,27 +29,81 @@ LittleX is a minimalistic implementation of a **social media platform** that sho
 
 ## **Running LittleX on Local Environment**
 
-### 1. Clone the Repository
+**Prerequisites:** Python 3, Node.js, and [Jaseci](https://github.com/Jaseci-Labs/jaseci) (`pip install jaclang` and `jac serve` available).
 
-Start by cloning the **LittleX** repository to your local system:
+### 1. Get the code
+
+Either clone the LittleX repo:
 
 ```bash
 git clone https://github.com/Jaseci-Labs/littleX.git
 cd littlex
 ```
-### 2. Install Dependencies
+
+Or use the `littleX` folder from a parent repository (e.g. from repo root):
+
+```bash
+cd /path/to/parent-repo   # e.g. voipy
+# All paths below use littleX/... when inside a parent repo
+```
+
+### 2. Install dependencies
+
+From the **LittleX repo root** (or from the parent repo root, using `littleX/` prefixes):
+
 ```bash
 pip install -r littleX_BE/requirements.txt
 ```
 
-### 3. Start the Backend Server
+If LittleX is inside another repo:
+
+```bash
+pip install -r littleX/littleX_BE/requirements.txt
+```
+
+### 3. (Optional) Backend environment
+
+For cloud/LLM features, set your API key:
+
+```bash
+cp littleX_BE/.env.example littleX_BE/.env
+# Edit .env and set GEMINI_API_KEY (or other keys) as needed
+```
+
+If LittleX is inside another repo, use `littleX/littleX_BE/.env.example` and `littleX/littleX_BE/.env`.
+
+### 4. Start the backend server
+
+In one terminal, from the repo root:
+
 ```bash
 jac serve littleX_BE/littleX.jac
 ```
-### 4. Run the Frontend Server
-Open another command line
+
+If LittleX is inside another repo:
+
+```bash
+jac serve littleX/littleX_BE/littleX.jac
+```
+
+Keep this terminal open. Note the URL (e.g. `http://localhost:8000`).
+
+### 5. Run the frontend
+
+In a **second terminal**, from the repo root:
+
 ```bash
 cd littleX_FE
 npm i
 npm run dev
 ```
+
+If LittleX is inside another repo:
+
+```bash
+cd littleX/littleX_FE
+npm i
+npm run dev
+```
+
+Open the URL shown (e.g. `http://localhost:3000`). Use the app with the backend running in the other terminal.
