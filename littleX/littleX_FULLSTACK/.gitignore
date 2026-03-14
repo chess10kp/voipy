@@ -24,3 +24,10 @@ frontend/
 *.session
 *.session.*
 .env
+
+# Browser automation
+logs/
+*.pid
+mcp_port.conf
+screenshot*.png
+

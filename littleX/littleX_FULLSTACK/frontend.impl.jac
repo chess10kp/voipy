@@ -1,5 +1,7 @@
 """Voipy - Frontend function implementations."""
 
+import http;
+
 impl app.loadData -> None {
     result = root spawn setup_profile(username=localStorage.getItem("lx_username") or "");
     myProfile = result.reports[0] if result.reports else None;
@@ -60,6 +62,7 @@ impl app.handleLogout -> None {
     chatInput = "";
     authUsername = "";
     authPassword = "";
+    browserClose();
 }
 
 impl app.handleSendMessage -> None {
@@ -74,4 +77,184 @@ impl app.handleSendMessage -> None {
     result = await root spawn chat_message(content=text);
     response_content = (result.reports[0]["content"] if result and result.reports and result.reports[0] else "Sorry, the backend didn't respond.");
     messages = messages + [{"id": assistant_id, "role": "assistant", "content": response_content}];
+}
+
+impl app.openBrowserSession -> None {
+    browserLoading = True;
+    mcp_port = parseInt(localStorage.getItem("mcp_port") or "8001");
+    mcp_url = "http://localhost:" + mcp_port + "/tools/browser_create_session";
+    
+    try {
+        response = await http.post(mcp_url, json={"session_id": browserSessionId, "headless": browserHeadless});
+        data = await response.json();
+        
+        if data["status"] == "success" {
+            await logBrowserAction("Session Created", "Browser session '" + browserSessionId + "' opened", data["message"]);
+        } else {
+            await logBrowserAction("Session Failed", data["error"] if data["error"] else "Unknown error", "");
+        }
+    } catch Exception as e {
+        await logBrowserAction("Session Error", str(e), "");
+    }
+    
+    browserLoading = False;
+}
+
+impl app.browserNavigate -> None {
+    if not browserUrl.trim() {
+        return;
+    }
+    
+    browserLoading = True;
+    mcp_port = parseInt(localStorage.getItem("mcp_port") or "8001");
+    mcp_url = "http://localhost:" + mcp_port + "/tools/browser_navigate";
+    
+    try {
+        response = await http.post(mcp_url, json={"session_id": browserSessionId, "url": browserUrl});
+        data = await response.json();
+        
+        if data["status"] == "success" {
+            await logBrowserAction("Navigate", "Navigated to " + browserUrl, "Title: " + (data["title"] or "N/A"));
+        } else {
+            await logBrowserAction("Navigation Failed", data["error"] if data["error"] else "Unknown error", "");
+        }
+    } catch Exception as e {
+        await logBrowserAction("Navigation Error", str(e), "");
+    }
+    
+    browserLoading = False;
+}
+
+impl app.browserClick -> None {
+    if not browserSelector.trim() {
+        return;
+    }
+    
+    browserLoading = True;
+    mcp_port = parseInt(localStorage.getItem("mcp_port") or "8001");
+    mcp_url = "http://localhost:" + mcp_port + "/tools/browser_click";
+    
+    try {
+        response = await http.post(mcp_url, json={"session_id": browserSessionId, "selector": browserSelector});
+        data = await response.json();
+        
+        if data["status"] == "success" {
+            await logBrowserAction("Click", "Clicked element: " + browserSelector, "");
+        } else {
+            await logBrowserAction("Click Failed", data["error"] if data["error"] else "Unknown error", "");
+        }
+    } catch Exception as e {
+        await logBrowserAction("Click Error", str(e), "");
+    }
+    
+    browserLoading = False;
+}
+
+impl app.browserType -> None {
+    if not browserSelector.trim() or not browserText.trim() {
+        return;
+    }
+    
+    browserLoading = True;
+    mcp_port = parseInt(localStorage.getItem("mcp_port") or "8001");
+    mcp_url = "http://localhost:" + mcp_port + "/tools/browser_type";
+    
+    try {
+        response = await http.post(mcp_url, json={"session_id": browserSessionId, "selector": browserSelector, "text": browserText});
+        data = await response.json();
+        
+        if data["status"] == "success" {
+            await logBrowserAction("Type", "Typed '" + browserText + "' into: " + browserSelector, "");
+        } else {
+            await logBrowserAction("Type Failed", data["error"] if data["error"] else "Unknown error", "");
+        }
+    } catch Exception as e {
+        await logBrowserAction("Type Error", str(e), "");
+    }
+    
+    browserLoading = False;
+}
+
+impl app.browserScreenshot -> None {
+    browserLoading = True;
+    mcp_port = parseInt(localStorage.getItem("mcp_port") or "8001");
+    mcp_url = "http://localhost:" + mcp_port + "/tools/browser_screenshot";
+    
+    try {
+        response = await http.post(mcp_url, json={"session_id": browserSessionId, "full_page": True});
+        data = await response.json();
+        
+        if data["status"] == "success" {
+            browserScreenshot = data["screenshot"];
+            await logBrowserAction("Screenshot", "Captured full page screenshot", "Size: " + String(data["size"]) + " bytes");
+        } else {
+            await logBrowserAction("Screenshot Failed", data["error"] if data["error"] else "Unknown error", "");
+        }
+    } catch Exception as e {
+        await logBrowserAction("Screenshot Error", str(e), "");
+    }
+    
+    browserLoading = False;
+}
+
+impl app.browserExtractText -> None {
+    browserLoading = True;
+    mcp_port = parseInt(localStorage.getItem("mcp_port") or "8001");
+    mcp_url = "http://localhost:" + mcp_port + "/tools/browser_extract_text";
+    
+    try {
+        response = await http.post(mcp_url, json={"session_id": browserSessionId, "selector": ""});
+        data = await response.json();
+        
+        if data["status"] == "success" {
+            extracted_text = data["text"];
+            if extracted_text.length > 500 {
+                extracted_text = extracted_text.substring(0, 500) + "...";
+            }
+            await logBrowserAction("Extract Text", "Extracted page content", "Title: " + (data["title"] or "N/A") + ", Length: " + String(extracted_text.length));
+        } else {
+            await logBrowserAction("Extract Failed", data["error"] if data["error"] else "Unknown error", "");
+        }
+    } catch Exception as e {
+        await logBrowserAction("Extract Error", str(e), "");
+    }
+    
+    browserLoading = False;
+}
+
+impl app.browserClose -> None {
+    mcp_port = parseInt(localStorage.getItem("mcp_port") or "8001");
+    mcp_url = "http://localhost:" + mcp_port + "/tools/browser_close_session";
+    
+    try {
+        response = await http.post(mcp_url, json={"session_id": browserSessionId});
+        data = await response.json();
+        
+        if data["status"] == "success" {
+            browserScreenshot = "";
+            browserUrl = "";
+            browserSelector = "";
+            browserText = "";
+            await logBrowserAction("Session Closed", "Browser session '" + browserSessionId + "' terminated", data["message"]);
+        } else {
+            await logBrowserAction("Close Failed", data["error"] if data["error"] else "Unknown error", "");
+        }
+    } catch Exception as e {
+        await logBrowserAction("Close Error", str(e), "");
+    }
+}
+
+impl app.logBrowserAction(action: str, details: str, result: str = "") -> None {
+    timestamp = new Date();
+    time_str = timestamp.getHours().toString().padStart(2, "0") + ":" + timestamp.getMinutes().toString().padStart(2, "0");
+    
+    logEntry = {
+        "time": time_str,
+        "action": action,
+        "details": details
+    };
+    
+    browserActionLog = browserActionLog + [logEntry];
+    
+    root spawn browser_interaction_log(action=action, details=details, result=result);
 }

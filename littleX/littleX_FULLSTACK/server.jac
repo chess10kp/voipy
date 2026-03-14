@@ -678,3 +678,18 @@ walker create_channel_tweet {
         report {"error": "Not a member of this channel"};
     }
 }
+
+walker browser_interaction_log {
+    has action: str = "";
+    has details: str = "";
+    has result: str = "";
+
+    can run with Root entry {
+        report {
+            "action": self.action,
+            "details": self.details,
+            "result": self.result,
+            "timestamp": _now()
+        };
+    }
+}
