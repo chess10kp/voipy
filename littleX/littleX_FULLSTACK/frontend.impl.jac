@@ -66,13 +66,12 @@ impl app.handleLogout -> None {
 }
 
 impl app.handleSendMessage -> None {
-    import datetime;
     if not chatInput.trim() {
         return;
     }
     text = chatInput.trim();
     chatInput = "";
-    timestamp_ms = int(datetime.datetime.now().timestamp() * 1000);
+    timestamp_ms = Date.now();
     user_id = "msg-" + String(timestamp_ms) + "-user";
     messages = messages + [{"id": user_id, "role": "user", "content": text}];
     assistant_id = "msg-" + String(timestamp_ms) + "-asst";
@@ -240,9 +239,8 @@ impl app.browserClose -> None {
 }
 
 impl app.logBrowserAction(action: str, details: str) -> None {
-    import datetime;
-    timestamp = datetime.datetime.now();
-    time_str = timestamp.strftime("%H:%M");
+    timestamp = Reflect.construct(Date, []);
+    time_str = timestamp.toLocaleTimeString("en-GB", {"hour": "2-digit", "minute": "2-digit"});
     
     logEntry = {
         "time": time_str,

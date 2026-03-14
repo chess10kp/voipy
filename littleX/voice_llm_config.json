@@ -1,0 +1,5 @@
+{
+  "MINIMAX_API_HOST": "https://api.minimax.io",
+  "MINIMAX_API_KEY": "sk-cp-70kIZgYo4wGo9wSbgIsarM-IE1SJWFq70sN-XeqqF9F5WdNYawbX8TYUmTWb7on4EZy7otDqZcgyCVmV8Tq-iyKBuauCPhtwqQTAF0EzBYxJwS2PvgMMsBk",
+  "model": "MiniMax-M2.5"
+}

@@ -1,2 +1,5 @@
 .jac_mypy_cache/
 .jac/
+# Voice pipeline
+voice_pipeline/.venv/
+voice_pipeline/.env

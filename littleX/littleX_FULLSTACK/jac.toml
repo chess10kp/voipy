@@ -37,8 +37,6 @@ base_route_app = "app"
 
 [plugins.client.app_meta_data]
 title = "Voipy"
-description = "A decentralized social platform built with Jac"
-keywords = "voipy social jac jaseci"
 author = "Jaseci Labs"
 theme_color = "#f97316"
 icon = "/static/assets/voipy-logo.png"

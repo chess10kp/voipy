@@ -1,11 +1,9 @@
-# Voipy - Social App with Browser Automation
+# Voipy - Browser Automation for financial markets
 
 A full-stack Jac application with React support and integrated browser automation capabilities.
 
 ## Features
 
-- 🌐 **Social Networking**: Profiles, tweets, channels, following/followers
-- 💬 **Chat System**: Real-time messaging with AI assistant
 - 🤖 **Browser Automation**: Control visible Chrome browsers for testing, scraping, and demos
 - 🔌 **MCP Integration**: Expose all features via Model Context Protocol
 - 🎨 **Modern UI**: Responsive design with dark theme
@@ -16,7 +14,7 @@ A full-stack Jac application with React support and integrated browser automatio
 voipy/
  ├── jac.toml              # Project configuration
  ├── main.jac              # Main application entry
- ├── server.jac             # Backend walkers (social + browser logging)
+ ├── server.jac             # Backend walkers (browser logging)
  ├── frontend.cl.jac         # React component declarations
  ├── frontend.impl.jac       # Frontend function implementations
  ├── mcp_wrapper.py         # MCP server with browser automation
@@ -52,7 +50,7 @@ cd /home/sigma/projects/repos/voipy/littleX/littleX_FULLSTACK
 ```
 
 This starts:
-- **Jac Scale Server** (port 8080): Web application + social features
+- **Jac Scale Server** (port 8080): Web application 
 - **MCP Wrapper Server** (port 8001): Browser automation + MCP tools
 
 Access web app at: `http://localhost:8080`
@@ -82,8 +80,6 @@ Connect to `http://localhost:8001` to access:
 **Available Tools:**
 `browser_create_session`, `browser_navigate`, `browser_click`, `browser_type`, `browser_screenshot`, `browser_extract_text`, `browser_wait_for`, `browser_evaluate`, `browser_get_url`, `browser_list_sessions`, `browser_close_session`, `browser_close_all`
 
-**Social Tools:**
-`get_all_profiles`, `get_profile`, `setup_profile`, `follow_user`, `unfollow_user`, `load_feed`, `get_trending`, `create_tweet`, `delete_tweet`, `like_tweet`, `add_comment`, `get_channels`, `get_channel_detail`, `create_channel`, `join_channel`, `leave_channel`, `create_channel_tweet`, `get_chat_messages`, `chat_message`, `ping`
 
 ## Testing
 

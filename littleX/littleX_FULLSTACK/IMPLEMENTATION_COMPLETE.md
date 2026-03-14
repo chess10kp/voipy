@@ -7,7 +7,6 @@ Your Voipy application now has **fully integrated browser automation** with visi
 ### 1. MCP Server with Browser Tools ✅
 **File**: `mcp_wrapper.py`
 - 12 browser automation tools using Playwright
-- All 15 original Voipy social tools
 - Session management for multiple concurrent browsers
 - Visible browser support (headless mode optional)
 - Screenshot capture and base64 encoding
@@ -137,16 +136,6 @@ Your Voipy application now has **fully integrated browser automation** with visi
 10. `browser_list_sessions` - List all sessions
 11. `browser_close_session` - Close session
 12. `browser_close_all` - Close all sessions
-
-### Social Tools (15)
-- `get_all_profiles`, `get_profile`, `setup_profile`
-- `follow_user`, `unfollow_user`
-- `load_feed`, `get_trending`
-- `create_tweet`, `delete_tweet`, `like_tweet`, `add_comment`
-- `get_channels`, `get_channel_detail`
-- `create_channel`, `join_channel`, `leave_channel`, `create_channel_tweet`
-- `get_chat_messages`, `chat_message`
-- `ping`
 
 **Total: 27 MCP tools available!**
 
@@ -287,7 +276,6 @@ For issues:
 
 ✨ **Dual Access**: Control browser from website UI OR MCP clients
 🎨 **Visually Impressive**: Visible browsers, live screenshots, beautiful UI
-🔌 **Fully Integrated**: Browser automation + social features + chat system
 🤖 **Complete Tooling**: 27 MCP tools for full application control
 📱 **Modern Design**: Responsive, dark theme, smooth animations
 🔐 **Secure**: Session isolation, independent contexts
